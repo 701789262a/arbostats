@@ -53,8 +53,9 @@ def main():
         for line in range(result.shape[0]):
             bnbtrt[int(arr_a1[line] - arr_b1[line]) + 1000] += 1
             trtbnb[int(arr_b2[line] - arr_a2[line]) + 1000] += 1
-        plt.plot(bnbtrt, marker='x')
-        plt.plot(trtbnb, marker='x')
+        x=np.linspace(950,1050,100)
+        plt.plot(bnbtrt,x, marker='x')
+        plt.plot(trtbnb,x, marker='x')
         plt.show()
         y = np.array(list(range(10000)))
         f1 = interp1d(y - 1000, bnbtrt)
@@ -78,6 +79,7 @@ def main():
         print(pair)
         imagename = int(time.time())
         plt.savefig(os.path.join(os.getcwd()+'/pictures/') + str(imagename) + '.png', format='png', dpi=300)
+        plt.close()
         telegram(pair, d, imagename)
 
 
@@ -96,7 +98,7 @@ def telegram(pair, yml, imagename):
                                             str(yml['app_id']),
                                             'caption':
                                                 'PROSSIME SOGLIE ARBITRAGGIO VALUTATE SULLE PRECEDENTI ORE:\n'
-                                                '<code>' + str(pair) + '</code>'
+                                                '`' + str(pair) + '`'
                                             }, files={'photo': open(os.path.join(os.getcwd()+'/pictures/') + str(imagename) + '.png', 'rb')})
 
 
