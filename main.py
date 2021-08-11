@@ -21,7 +21,8 @@ def main():
     while True:
         print('IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
         if not first_time:
-            print(s.recv(43).decode())
+            #print(s.recv(43).decode())
+            print('not first time')
         rec = s.recv(4096).decode()
         filename, filesize = rec.split('<SEPARATOR>')
         filename = os.path.basename(filename)
