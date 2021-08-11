@@ -54,8 +54,8 @@ def main():
             bnbtrt[int(arr_a1[line] - arr_b1[line]) + 1000] += 1
             trtbnb[int(arr_b2[line] - arr_a2[line]) + 1000] += 1
         x=np.linspace(950,1050,10000)
-        plt.plot(bnbtrt,x, marker='x')
-        plt.plot(trtbnb,x, marker='x')
+        plt.plot(x,bnbtrt, marker='x')
+        plt.plot(x,trtbnb, marker='x')
         plt.show()
         y = np.array(list(range(10000)))
         f1 = interp1d(y - 1000, bnbtrt)
