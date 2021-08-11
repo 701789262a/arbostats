@@ -12,6 +12,7 @@ from scipy.interpolate import interp1d
 
 
 def main():
+    first_time=True
     with open("config.yaml") as f:
         d = yaml.safe_load(f)
         f.close()
@@ -19,11 +20,15 @@ def main():
     s.connect((d['host'], d['port']))
     while True:
         print('IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
+        if not first_time:
+            print(s.recv(43).decode())
         rec = s.recv(4096).decode()
         filename, filesize = rec.split('<SEPARATOR>')
         filename = os.path.basename(filename)
         filesize = int(filesize)
         print(filesize)
+        if first_time:
+            first_time=False
         total = len(rec)
         print('STREAM RICEVUTO, SCARICO IL .zip')
         with open(filename, "wb") as f:
@@ -55,7 +60,7 @@ def main():
             trtbnb[int(arr_b2[line] - arr_a2[line]) + 1000] += 1
         x=np.linspace(950,1050,10000)
         plt.plot(x,bnbtrt, marker='x')
-        plt.plot(x,trtbnb, marker='x')
+        plt.plot(x,trtbnb,marker='x')
         plt.show()
         y = np.array(list(range(10000)))
         f1 = interp1d(y - 1000, bnbtrt)
