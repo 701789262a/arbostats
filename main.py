@@ -38,12 +38,12 @@ def main():
                     break
         print('FILE SCARICATO, ESTRAGGO')
         with zipfile.ZipFile(d['path']+filename, 'r') as zip_ref:
-            zip_ref.extractall(d['path']+filename.split('.')[0])
+            zip_ref.extractall(os.path.join(os.getcwd()+filename.split('.')[0]))
         print('FILE SCOMPATTATO, INIZIO LA COMPUTAZIONE')
         frames = []
         trtbnb = [0] * 10000
         bnbtrt = [0] * 10000
-        for file in os.listdir(d['path'] + filename.split('.')[0]):
+        for file in os.listdir(os.path.join(os.getcwd()+filename.split('.')[0])):
             frames.append(pd.read_pickle(d['path'] + filename.split('.')[0] + '/' + file))
         result = pd.concat(frames).reset_index(drop=True)
         arr_a1 = result['TRT_bid'].to_numpy()
