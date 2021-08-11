@@ -12,7 +12,7 @@ from scipy.interpolate import interp1d
 
 
 def main():
-    first_time=True
+    first_time = True
     with open("config.yaml") as f:
         d = yaml.safe_load(f)
         f.close()
@@ -21,7 +21,7 @@ def main():
     while True:
         print('IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
         if not first_time:
-            #print(s.recv(43).decode())
+            # print(s.recv(43).decode())
             print('not first time')
         rec = s.recv(4096).decode()
         filename, filesize = rec.split('<SEPARATOR>')
@@ -29,7 +29,7 @@ def main():
         filesize = int(filesize)
         print(filesize)
         if first_time:
-            first_time=False
+            first_time = False
         total = len(rec)
         print('STREAM RICEVUTO, SCARICO IL .zip')
         with open(filename, "wb") as f:
@@ -43,13 +43,13 @@ def main():
                 if total >= filesize:
                     break
         print('FILE SCARICATO, ESTRAGGO')
-        with zipfile.ZipFile(d['path']+filename, 'r') as zip_ref:
-            zip_ref.extractall(os.path.join(os.getcwd()+'/'+filename.split('.')[0]))
+        with zipfile.ZipFile(d['path'] + filename, 'r') as zip_ref:
+            zip_ref.extractall(os.path.join(os.getcwd() + '/' + filename.split('.')[0]))
         print('FILE SCOMPATTATO, INIZIO LA COMPUTAZIONE')
         frames = []
         trtbnb = [0] * 10000
         bnbtrt = [0] * 10000
-        for file in os.listdir(os.path.join(os.getcwd()+'/'+filename.split('.')[0])):
+        for file in os.listdir(os.path.join(os.getcwd() + '/' + filename.split('.')[0])):
             frames.append(pd.read_pickle(d['path'] + filename.split('.')[0] + '/' + file))
         result = pd.concat(frames).reset_index(drop=True)
         arr_a1 = result['TRT_bid'].to_numpy()
@@ -59,10 +59,9 @@ def main():
         for line in range(result.shape[0]):
             bnbtrt[int(arr_a1[line] - arr_b1[line]) + 1000] += 1
             trtbnb[int(arr_b2[line] - arr_a2[line]) + 1000] += 1
-        x=np.linspace(950,1050,10000)
-        plt.plot(x,bnbtrt, marker='x')
-        plt.plot(x,trtbnb,marker='x')
-        plt.show()
+        x = np.linspace(925, 1075, 150)
+        plt.plot(x, bnbtrt, marker='x', label='BNB>TRT')
+        plt.plot(x, trtbnb, marker='x', label='TRT>BNB')
         y = np.array(list(range(10000)))
         f1 = interp1d(y - 1000, bnbtrt)
         f2 = interp1d(y - 1000, trtbnb)
@@ -83,15 +82,21 @@ def main():
                     pair['s2'] = round(x2, 1)
                     pair['score'] = round((x1 + x2) * i, 1)
         print(pair)
+        plt.hlines(pair['score'] / pair['s1'] + pair['s2'], 1000 + pair['s2'], 1000 + pair['s1'], linestyles='dashed',
+                   colors='k')
+        plt.vlines(1000 + pair['s2'], 0, pair['score'] / pair['s1'] + pair['s2'], colors='k')
+        plt.vlines(1000 + pair['s1'], 0, pair['score'] / pair['s1'] + pair['s2'], colors='k')
+
         imagename = int(time.time())
-        plt.savefig(os.path.join(os.getcwd()+'/pictures/') + str(imagename) + '.png', format='png', dpi=300)
+        plt.savefig(os.path.join(os.getcwd() + '/pictures/') + str(imagename) + '.png', format='png', dpi=300)
         plt.close()
         telegram(pair, d, imagename)
 
 
 def func1(f, value):
     n = -500
-    for i in np.linspace(-50, 50, 1000):
+    x= np.linspace(-50, 50, 1000)
+    for i in x:
         if is_near(int(f(i)), value):
             if i > n:
                 n = i
@@ -101,11 +106,12 @@ def func1(f, value):
 def telegram(pair, yml, imagename):
     url = 'https://api.telegram.org/bot' + yml['token']
     requests.post(url + '/sendPhoto', data={'chat_id':
-                                            str(yml['app_id']),
+                                                str(yml['app_id']),
                                             'caption':
                                                 'PROSSIME SOGLIE ARBITRAGGIO VALUTATE SULLE PRECEDENTI ORE:\n'
                                                 '`' + str(pair) + '`'
-                                            }, files={'photo': open(os.path.join(os.getcwd()+'/pictures/') + str(imagename) + '.png', 'rb')})
+                                            },
+                  files={'photo': open(os.path.join(os.getcwd() + '/pictures/') + str(imagename) + '.png', 'rb')})
 
 
 def is_near(x, y):
