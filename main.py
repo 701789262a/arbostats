@@ -77,7 +77,7 @@ def main():
                     pair['score'] = round((x1 + x2) * i, 1)
         print(pair)
         imagename = int(time.time())
-        plt.savefig('./photo/' + str(imagename) + '.png', format='png', dpi=300)
+        plt.savefig(os.path.join(os.getcwd()+'/pictures/') + str(imagename) + '.png', format='png', dpi=300)
         telegram(pair, d, imagename)
 
 
@@ -97,7 +97,7 @@ def telegram(pair, yml, imagename):
                                             'caption':
                                                 'PROSSIME SOGLIE ARBITRAGGIO VALUTATE SULLE PRECEDENTI ORE:\n'
                                                 '<code>' + pair + '</code>'
-                                            }, files={'photo': open(str('./photo/' + imagename) + '.png', 'rb')})
+                                            }, files={'photo': open(os.path.join(os.getcwd()+'/pictures/') + str(imagename) + '.png', 'rb')})
 
 
 def is_near(x, y):
