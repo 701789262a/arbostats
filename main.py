@@ -37,7 +37,7 @@ def main():
                 if total >= filesize:
                     break
         print('FILE SCARICATO, ESTRAGGO')
-        with zipfile.ZipFile(filename, 'r') as zip_ref:
+        with zipfile.ZipFile(d['path']+filename.split('.')[0], 'r') as zip_ref:
             zip_ref.extractall(filename.split('.')[0])
         print('FILE SCOMPATTATO, INIZIO LA COMPUTAZIONE')
         frames = []
