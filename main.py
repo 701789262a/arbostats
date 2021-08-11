@@ -53,7 +53,7 @@ def main():
         for line in range(result.shape[0]):
             bnbtrt[int(arr_a1[line] - arr_b1[line]) + 1000] += 1
             trtbnb[int(arr_b2[line] - arr_a2[line]) + 1000] += 1
-        x=np.linspace(950,1050,100)
+        x=np.linspace(950,1050,10000)
         plt.plot(bnbtrt,x, marker='x')
         plt.plot(trtbnb,x, marker='x')
         plt.show()
