@@ -71,7 +71,7 @@ def main():
             x2 = func1(f2, i)
             if x1 + x2 > 5 and x1 != -500 and x2 != -500:
                 val = ((x1 + x2) * i / (1 + (100 / i)))
-                if val > pair['point']:
+                if val > pair['score']:
                     pair['s1'] = round(x1, 1)
                     pair['s2'] = round(x2, 1)
                     pair['score'] = round((x1 + x2) * i, 1)
