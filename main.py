@@ -20,9 +20,6 @@ def main():
     s.connect((d['host'], d['port']))
     while True:
         print('IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
-        if not first_time:
-            print('BYTE NON FILLATI')
-            print(s.recv(128).decode())
         first_time= False
         rec = s.recv(4096).decode()
         print('INFORMAZIONI PRELIMINARI RICEVUTE')
@@ -86,8 +83,8 @@ def main():
         print(pair)
         plt.hlines(pair['score'] / (pair['s1'] + pair['s2']), 1000 + pair['s2'], 1000 + pair['s1'], linestyles='dashed',
                    colors='k')
-        plt.vlines(1000 + pair['s2'], 0, pair['score'] / pair['s1'] + pair['s2'], colors='k')
-        plt.vlines(1000 + pair['s1'], 0, pair['score'] / pair['s1'] + pair['s2'], colors='k')
+        plt.vlines(1000 + pair['s2'], 0, pair['score'] / (pair['s1'] + pair['s2']), colors='k')
+        plt.vlines(1000 + pair['s1'], 0, pair['score'] / (pair['s1'] + pair['s2']), colors='k')
 
         image_name = int(time.time())
         plt.savefig(os.path.join(os.getcwd() + '/pictures/') + str(image_name) + '.png', format='png', dpi=300)
