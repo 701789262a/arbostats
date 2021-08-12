@@ -16,12 +16,15 @@ def main():
     with open("config.yaml") as f:
         d = yaml.safe_load(f)
         f.close()
-    s = socket.socket()
-    s.connect((d['host'], d['port']))
+    s_stats = socket.socket()
+    s_stats.bind(('0.0.0.0', 5001))
+    s_stats.listen(1)
     while True:
-        print('IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
+        print('ATTENDO NUOVA CONNESSIONE')
+        stats_socket, stats_address = s_stats.accept()
+        print('CONNESSIONE ACCETTATA, IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
         first_time= False
-        rec = s.recv(4096).decode()
+        rec = stats_socket.recv(4096).decode()
         print('INFORMAZIONI PRELIMINARI RICEVUTE')
         filename, filesize = rec.split('<SEPARATOR>')
         filename = os.path.basename(filename)
@@ -33,7 +36,7 @@ def main():
         print('STREAM RICEVUTO, SCARICO IL .zip')
         with open(filename, "wb") as f:
             while True:
-                bytes_read = s.recv(4096)
+                bytes_read = stats_socket.recv(4096)
                 total = total + len(bytes_read)
                 print(total)
                 f.write(bytes_read)
