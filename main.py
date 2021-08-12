@@ -20,6 +20,10 @@ def main():
     s.connect((d['host'], d['port']))
     while True:
         print('IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
+        if not first_time:
+            print('BYTE NON FILLATI')
+            print(s.recv(128).decode())
+        first_time= False
         rec = s.recv(4096).decode()
         print('INFORMAZIONI PRELIMINARI RICEVUTE')
         filename, filesize = rec.split('<SEPARATOR>')
@@ -80,15 +84,15 @@ def main():
                     pair['s2'] = round(x2, 1)
                     pair['score'] = round((x1 + x2) * i, 1)
         print(pair)
-        plt.hlines(pair['score'] / pair['s1'] + pair['s2'], 1000 + pair['s2'], 1000 + pair['s1'], linestyles='dashed',
+        plt.hlines(pair['score'] / (pair['s1'] + pair['s2']), 1000 + pair['s2'], 1000 + pair['s1'], linestyles='dashed',
                    colors='k')
         plt.vlines(1000 + pair['s2'], 0, pair['score'] / pair['s1'] + pair['s2'], colors='k')
         plt.vlines(1000 + pair['s1'], 0, pair['score'] / pair['s1'] + pair['s2'], colors='k')
 
-        imagename = int(time.time())
-        plt.savefig(os.path.join(os.getcwd() + '/pictures/') + str(imagename) + '.png', format='png', dpi=300)
+        image_name = int(time.time())
+        plt.savefig(os.path.join(os.getcwd() + '/pictures/') + str(image_name) + '.png', format='png', dpi=300)
         plt.close()
-        telegram(pair, d, imagename)
+        telegram(pair, d, image_name)
 
 
 def func1(f, value):
