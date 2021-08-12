@@ -20,10 +20,8 @@ def main():
     s.connect((d['host'], d['port']))
     while True:
         print('IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
-        if not first_time:
-            # print(s.recv(43).decode())
-            print('not first time')
         rec = s.recv(4096).decode()
+        print('INFORMAZIONI PRELIMINARI RICEVUTE')
         filename, filesize = rec.split('<SEPARATOR>')
         filename = os.path.basename(filename)
         filesize = int(filesize)
