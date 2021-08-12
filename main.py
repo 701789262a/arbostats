@@ -75,8 +75,8 @@ def main():
         pair = {'s1': 0, 's2': 0, 'score': 0}
         for i in range(start, 2000, -50):
             print(i)
-            x1 = func1(f1, i)
-            x2 = func1(f2, i)
+            x1 = func1(f1, i,d)
+            x2 = func1(f2, i,d)
             if x1 + x2 > 5 and x1 != -500 and x2 != -500:
                 val = ((x1 + x2) * i / (1 + (100 / i)))
                 if val > pair['score']:
