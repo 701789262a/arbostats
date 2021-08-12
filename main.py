@@ -18,7 +18,7 @@ def main():
         f.close()
     s_stats = socket.socket()
     s_stats.bind(('0.0.0.0', 5001))
-    s_stats.listen(1)
+    s_stats.listen(5)
     while True:
         print('ATTENDO NUOVA CONNESSIONE')
         stats_socket, stats_address = s_stats.accept()
@@ -95,11 +95,11 @@ def main():
         telegram(pair, d, image_name)
 
 
-def func1(f, value):
+def func1(f, value,yml):
     n = -500
     x= np.linspace(-50, 50, 1000)
     for i in x:
-        if is_near(int(f(i)), value):
+        if is_near(int(f(i)), value,yml):
             if i > n:
                 n = i
     return n
@@ -116,8 +116,8 @@ def telegram(pair, yml, imagename):
                   files={'photo': open(os.path.join(os.getcwd() + '/pictures/') + str(imagename) + '.png', 'rb')})
 
 
-def is_near(x, y):
-    if abs(x - y) < 2000:
+def is_near(x, y,yml):
+    if abs(x - y) < int(yml['near']):
         return True
     return False
 
