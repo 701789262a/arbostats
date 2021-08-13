@@ -73,7 +73,7 @@ def main():
         # print(func(f1,start))
         # print(func(f2,f1(func(f1,start))))
         pair = {'s1': 0, 's2': 0, 'score': 0}
-        for i in range(start, 2000, -50):
+        for i in range(start, d['near'], -50):
             print(i)
             x1 = func1(f1, i,d)
             x2 = func1(f2, i,d)
