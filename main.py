@@ -23,8 +23,11 @@ def main():
         print('ATTENDO NUOVA CONNESSIONE')
         stats_socket, stats_address = s_stats.accept()
         print('CONNESSIONE ACCETTATA, IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
-        first_time= False
-        rec = stats_socket.recv(4096).decode()
+        try:
+            rec = stats_socket.recv(4096).decode()
+        except UnicodeDecodeError:
+            print('UNICODE DECODE ERROR')
+            continue
         print('INFORMAZIONI PRELIMINARI RICEVUTE')
         filename, filesize = rec.split('<SEPARATOR>')
         filename = os.path.basename(filename)
