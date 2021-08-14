@@ -111,7 +111,9 @@ def telegram(pair, yml, imagename):
                                                 str(yml['app_id']),
                                             'caption':
                                                 'PROSSIME SOGLIE ARBITRAGGIO VALUTATE SULLE PRECEDENTI ORE:\n'
-                                                '`' + str(pair) + '`'
+                                                '<code>' + str(pair) + '</code>',
+                                            'parse_mode':
+                                                'HTML'
                                             },
                   files={'photo': open(os.path.join(os.getcwd() + '/pictures/') + str(imagename) + '.png', 'rb')})
 
