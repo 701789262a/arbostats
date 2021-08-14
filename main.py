@@ -25,11 +25,15 @@ def main():
         print('CONNESSIONE ACCETTATA, IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
         try:
             rec = stats_socket.recv(4096).decode()
+            filename, filesize = rec.split('<SEPARATOR>')
         except UnicodeDecodeError:
             print('UNICODE DECODE ERROR')
+            del rec
+            continue
+        except ValueError:
+            print('ERRORE SPLIT')
             continue
         print('INFORMAZIONI PRELIMINARI RICEVUTE')
-        filename, filesize = rec.split('<SEPARATOR>')
         filename = os.path.basename(filename)
         filesize = int(filesize)
         print(filesize)
