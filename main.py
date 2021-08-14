@@ -84,11 +84,13 @@ def main():
                     pair['s2'] = round(x2, 1)
                     pair['score'] = round((x1 + x2) * i, 1)
         print(pair)
-        plt.hlines(pair['score'] / (pair['s1'] + pair['s2']), 1000 + pair['s2'], 1000 + pair['s1'], linestyles='dashed',
+        try:
+            plt.hlines(pair['score'] / (pair['s1'] + pair['s2']), 1000 + pair['s2'], 1000 + pair['s1'], linestyles='dashed',
                    colors='k')
-        plt.vlines(1000 + pair['s2'], 0, pair['score'] / (pair['s1'] + pair['s2']), colors='k')
-        plt.vlines(1000 + pair['s1'], 0, pair['score'] / (pair['s1'] + pair['s2']), colors='k')
-
+            plt.vlines(1000 + pair['s2'], 0, pair['score'] / (pair['s1'] + pair['s2']), colors='k')
+            plt.vlines(1000 + pair['s1'], 0, pair['score'] / (pair['s1'] + pair['s2']), colors='k')
+        except ZeroDivisionError:
+            print('TROPPI POCHI DATI')
         image_name = int(time.time())
         plt.savefig(os.path.join(os.getcwd() + '/pictures/') + str(image_name) + '.png', format='png', dpi=300)
         plt.close()
