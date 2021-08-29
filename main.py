@@ -20,6 +20,11 @@ def main():
     s_stats.bind(('0.0.0.0', 5001))
     s_stats.listen(5)
     while True:
+        if int(str(int(time.time()))[-4:]) % 600 == 0:
+            with open("config.yaml") as f:
+                d = yaml.safe_load(f)
+                print("[!] REFRESHING YAML PROGRAM CONFIGURATION...")
+                f.close()
         print('ATTENDO NUOVA CONNESSIONE')
         stats_socket, stats_address = s_stats.accept()
         print('CONNESSIONE ACCETTATA, IN ATTESA DI RICEVERE IL PROSSIMO STREAM')
@@ -84,7 +89,7 @@ def main():
             print(i)
             x1 = func1(f1, i,d)
             x2 = func1(f2, i,d)
-            if x1 + x2 > 5 and x1 != -500 and x2 != -500:
+            if x1 + x2 > int(d['threshold']) and x1 != -500 and x2 != -500:
                 val = ((x1 + x2) * i / (1 + (100 / i)))
                 if val > pair['score']:
                     pair['s1'] = round(x1, 1)
